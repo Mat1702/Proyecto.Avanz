@@ -33,31 +33,37 @@ int main(){
         cout<<"Va a crear una base de datos en binario llamada pasajero.dat: "<<endl;
         cout<<"ok? PRESIONE ENTER"<<endl;
         FILE* archi = fopen("pasajero.dat", "wb");
-
+        
         char resp='s';
 
-        while(resp!='n'){
+        while(resp!='n'){ 
         pasa_aux=cargar_pasa();
-
-        fwrite( &pasa_aux, sizeof(registro), 1, archi );
+          
+        fwrite( &pasa_aux, sizeof(registro), 1, archi ); 
          cout<<endl;
         cout << "Desea reservar mas pasajero ( s/n ): ";
-
+      
         cin>>resp;
-
+          
         }
         fclose(archi);
         cout<<endl;
-
+       
       do{
         cout<<"\t\tUsuario porfavor escoja una de las siguientes opciones: "<<endl;
         cout<<endl;
         cout<<"1. visualizar los pasajeros en la base de datos"<<endl;
+        cout<<endl;
         cout<<"2. agregar pasajeros en la base de datos "<<endl;
+        cout<<endl;
         cout<<"3. buscar pasajeros en la base de datos"<<endl;
+        cout<<endl;
         cout<<"4. eliminar pasajeros en la base de datos "<<endl;
+        cout<<endl;
         cout<<"5. modificar pasajeros en la base de datos"<<endl;
+        cout<<endl;
         cout<<"6. terminar programa"<<endl;
+        cout<<endl;
         cout<<"Ingrese su opcion: "<<endl;
             cin>>menu;
             switch (menu)
@@ -68,7 +74,7 @@ int main(){
                 case 2:
                 agregar();
                 break;
-                case 3:
+                case 3: 
                 buscar();
                 break;
                 case 4:
@@ -81,16 +87,16 @@ int main(){
                 break;
             }
       }while(menu <=5);
-
+      
     return 0;
 }
 
 registro cargar_pasa(){
-
+  
   registro pasa_dian;
   string nombre,apelli,destino,orige;
-
-
+  
+         
           cin.ignore();
           cout<<"nombre: "<<endl;
           getline(cin, nombre);
@@ -111,12 +117,12 @@ registro cargar_pasa(){
           cout<<"Destino: "<<endl;
           getline(cin, destino);
           strcpy( pasa_dian.destino, destino.c_str());
-
+          
     return pasa_dian;
 }
 
 void ver(){
-
+    
 ifstream archi;
 
 archi.open("pasajero.dat",ios::binary | ios::in);
@@ -124,12 +130,12 @@ archi.open("pasajero.dat",ios::binary | ios::in);
 archi.seekg(0);
 registro pasa;
  archi.read( (char *)(&pasa), sizeof(registro) );
-cout<<"nombre\tapellido\tedad\tID\t\tOrigen\tDestino"<<endl;
+cout<<"nombre\tapellido\tedad\t     ID\t\tOrigen\tDestino"<<endl;
 cout<<"___________________________________________"<<endl;
 while(!archi.eof()){
    cout<<pasa.nombre<<setw(10)<<pasa.apellido<<setw(14)<<pasa.edad<<setw(10)<<pasa.id<<setw(10)<<pasa.orige<<setw(17)<<pasa.destino<<endl;
    archi.read( (char *)(&pasa), sizeof(registro) );
-
+   
 }
     archi.close();
 }
@@ -138,27 +144,27 @@ while(!archi.eof()){
 
 void agregar()
 {
-
+     
     ofstream archi("pasajero.dat",ios::binary | ios::app);
      cout<<endl;
     cout<<"\t\tAgrege los datos de los pasajeros: "<<endl;
     char resp='s';
 
-        while(resp!='n'){
+        while(resp!='n'){ 
         pasa_aux=cargar_pasa();
-
-        archi.write( (char *)(&pasa_aux), sizeof(registro) );
+          
+        archi.write( (char *)(&pasa_aux), sizeof(registro) ); 
         cout<<endl;
         cout << "Desea cargar mas pasajeros ( s/n ): ";
-
+      
         cin>>resp;
         }
         archi.close();
         }
-
-
+        
+ 
  void buscar(){
-
+  
    ifstream archi;
 char respues='s';
 
@@ -174,20 +180,20 @@ cin>>ids;
 while(!archi.eof()){
    archi.read( (char *)(&pasa), sizeof(registro) );
    if(ids==pasa.id){
-   cout<<"nombre\tapellido\tedad\tID\t\tOrigen\tDestino"<<endl;
+   cout<<"nombre\tapellido\tedad\t    ID\t\tOrigen\tDestino"<<endl;
    cout<<pasa.nombre<<setw(10)<<pasa.apellido<<setw(14)<<pasa.edad<<setw(10)<<pasa.id<<setw(10)<<pasa.orige<<setw(17)<<pasa.destino<<endl;
    existe=1;
-
+       
    }}
    if(existe==0){
        cout<<"No existe el estudiante"<<endl;
    }
-
+ 
 
     archi.close();
- }
-
-
+ }   
+ 
+ 
  void eliminar(){
       fstream archilect("pasajero.dat");
       ofstream archiescr("auxiliar.dat");
@@ -198,31 +204,31 @@ while(!archi.eof()){
    cin>>ids;
     while(!archilect.eof()){
    archilect.read( (char *)(&pasa), sizeof(registro) );
-
-
+   
+    
    while(archilect && !archilect.eof()){
     if(ids==pasa.id){
         cout<<"DATOS DEL ESTUDIANTE:"<<endl;
-   cout<<"nombre\tapellido\tedad\tID\t\tOrigen\tDestino"<<endl;
+   cout<<"nombre\tapellido\tedad\t    ID\t\tOrigen\tDestino"<<endl;
    cout<<"___________________________________________"<<endl;
    cout<<pasa.nombre<<setw(10)<<pasa.apellido<<setw(14)<<pasa.edad<<setw(10)<<pasa.id<<setw(10)<<pasa.orige<<setw(17)<<pasa.destino<<endl;
    cout<<"\t\t**PASAJERO ELIMINADO**"<<endl;
-   existe=1;
+   existe=1;        
     }else{
     archiescr.write((char *)(&pasa), sizeof(registro));
     }
     archilect.read((char *)(&pasa), sizeof(registro));}
-
+       
    archilect.close();
    archiescr.close();
    remove("pasajero.dat");
    rename("auxiliar.dat","pasajero.dat");
    }
-
+   
    if(existe==0){
        cout<<"No existe el estudiante"<<endl;
    }}
-
+ 
 void modificar(){
       fstream archilectura("pasajero.dat");
       ofstream archiescritura("auxiliares.dat");
@@ -236,15 +242,15 @@ void modificar(){
     while(!archilectura.eof()){
    archilectura.read( (char *)(&pasa), sizeof(registro) );
 
-
+    
    while(archilectura && !archilectura.eof()){
     if(ids==pasa.id){
         cout<<"DATOS DEL PASAJERO:"<<endl;
-   cout<<"nombre\tapellido\tedad\tID\t\tOrigen\tDestino"<<endl;
+   cout<<"nombre\tapellido\tedad\t    ID\t\tOrigen\tDestino"<<endl;
    cout<<"___________________________________________"<<endl;
    cout<<pasa.nombre<<setw(10)<<pasa.apellido<<setw(14)<<pasa.edad<<setw(10)<<pasa.id<<setw(10)<<pasa.orige<<setw(17)<<pasa.destino<<endl;
    existe=1;
-
+   
    cout<<"Digite nuevo nombre o f para dejar el actual: "<<endl;
     cin.ignore();
      getline(cin,nombre);
@@ -252,7 +258,7 @@ void modificar(){
          pasa.nombre;
      }else{
      strcpy(pasa.nombre,nombre.c_str());}
-
+     
      cout<<"Digite nuevo apellido o f para dejar el actual: "<<endl;
      getline(cin,appell);
       if(appell=="f"){
@@ -284,20 +290,20 @@ void modificar(){
          pasa.destino;
      }else{
      strcpy(pasa.destino,destinos.c_str());}
-
-
+    
+    
     archiescritura.write((char *)(&pasa), sizeof(registro));
     }else{
     archiescritura.write((char *)(&pasa), sizeof(registro));
     }
     archilectura.read((char *)(&pasa), sizeof(registro));}
-
+    
    archilectura.close();
    archiescritura.close();
    remove("pasajero.dat");
    rename("auxiliares.dat","pasajero.dat");
    }
-
+   
    if(existe==0){
        cout<<"No existe el pasajero"<<endl;
    }}
